@@ -1,0 +1,40 @@
+{
+  "name": "fix-webm-metainfo",
+  "version": "1.0.4",
+  "description": "a lib based on ts-ebml and support large file (>2GB)",
+  "author": "StaZhu",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "tsconfig.json"
+  ],
+  "keywords": [
+    "webm",
+    "mediaRecorder"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:StaZhu/fix-webm-meta.git"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "typescript": "^4.3.3"
+  },
+  "dependencies": {
+    "buffer": "^5.7.1",
+    "int64-buffer": "^0.1.10",
+    "ts-ebml": "^2.0.2"
+  },
+  "scripts": {
+    "build": "npm run clear && tsc",
+    "dev": "npm run clear && tsc -w",
+    "clear": "rimraf dist",
+    "increase": "npm version patch",
+    "increase:alpha": "npm version prerelease --preid=alpha",
+    "deploy": "npm run build && npm run increase && npm publish",
+    "deploy:alpha": "npm run build && npm run increase:alpha && npm publish --tag alpha"
+  }
+}
