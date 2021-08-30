@@ -33,19 +33,27 @@ function fixWebmMetaInfo(blob) {
         const decoder = new decoder_1.default();
         const reader = new ts_ebml_1.Reader();
         reader.logging = false;
-        const bufSlices = [];
+        let bufSlices = [];
+        let blobSlices = [];
         // 1GB slice is good, but dont set this value larger than 2046 * 1024 * 1024 due to new Uint8Array's limit
         const sliceLength = 1 * 1024 * 1024 * 1024;
         for (let i = 0; i < blob.size; i = i + sliceLength) {
-            const bufSlice = yield blob.slice(i, Math.min(i + sliceLength, blob.size)).arrayBuffer();
+            const slice = blob.slice(i, Math.min(i + sliceLength, blob.size));
+            const bufSlice = yield slice.arrayBuffer();
             bufSlices.push(bufSlice);
+            blobSlices.push(slice);
         }
         decoder.decode(bufSlices).forEach(elm => reader.read(elm));
         reader.stop();
         const refinedMetadataBuf = ts_ebml_1.tools.makeMetadataSeekable(reader.metadatas, reader.duration, reader.cues);
-        const firstPartSlice = bufSlices.shift();
-        const firstPartSliceWithoutMetadata = firstPartSlice.slice(reader.metadataSize);
-        return new Blob([refinedMetadataBuf, firstPartSliceWithoutMetadata, ...bufSlices], { type: blob.type });
+        const refinedMetadataBlob = new Blob([refinedMetadataBuf], { type: blob.type });
+        const firstPartBlobSlice = blobSlices.shift();
+        const firstPartBlobWithoutMetadata = firstPartBlobSlice.slice(reader.metadataSize);
+        // use blob instead of arrayBuffer to construct the new Blob, to minify memory leak
+        const finalBlob = new Blob([refinedMetadataBlob, firstPartBlobWithoutMetadata, ...blobSlices], { type: blob.type });
+        bufSlices = [];
+        blobSlices = [];
+        return finalBlob;
     });
 }
 exports.default = fixWebmMetaInfo;

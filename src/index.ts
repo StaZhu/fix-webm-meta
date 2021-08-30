@@ -20,21 +20,31 @@ export default async function fixWebmMetaInfo(blob: Blob): Promise<Blob> {
   const reader = new Reader();
   reader.logging = false;
 
-  const bufSlices: ArrayBuffer[] = [];
+  let bufSlices: ArrayBuffer[] = [];
+  let blobSlices: Blob[] = [];
+
   // 1GB slice is good, but dont set this value larger than 2046 * 1024 * 1024 due to new Uint8Array's limit
   const sliceLength = 1 * 1024 * 1024 * 1024;
   for (let i = 0; i < blob.size; i = i + sliceLength) {
-    const bufSlice = await blob.slice(i, Math.min(i + sliceLength, blob.size)).arrayBuffer();
+    const slice = blob.slice(i, Math.min(i + sliceLength, blob.size));
+    const bufSlice = await slice.arrayBuffer();
     bufSlices.push(bufSlice);
+    blobSlices.push(slice);
   }
 
   decoder.decode(bufSlices).forEach(elm => reader.read(elm));
   reader.stop();
 
   const refinedMetadataBuf = tools.makeMetadataSeekable(reader.metadatas, reader.duration, reader.cues);
+  const refinedMetadataBlob = new Blob([refinedMetadataBuf], { type: blob.type });
 
-  const firstPartSlice = bufSlices.shift() as ArrayBuffer;
-  const firstPartSliceWithoutMetadata = firstPartSlice.slice(reader.metadataSize);
+  const firstPartBlobSlice = blobSlices.shift();
+  const firstPartBlobWithoutMetadata = firstPartBlobSlice!.slice(reader.metadataSize);  
+  // use blob instead of arrayBuffer to construct the new Blob, to minify memory leak
+  const finalBlob = new Blob([refinedMetadataBlob, firstPartBlobWithoutMetadata, ...blobSlices], { type: blob.type });
 
-  return new Blob([refinedMetadataBuf, firstPartSliceWithoutMetadata, ...bufSlices], { type: blob.type });
+  bufSlices = [];
+  blobSlices = [];
+  
+  return finalBlob;
 }
