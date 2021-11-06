@@ -24,8 +24,9 @@
     "typescript": "^4.3.3"
   },
   "dependencies": {
-    "buffer": "^5.7.1",
-    "int64-buffer": "^0.1.10",
+    "buffer": "^6.0.3",
+    "ebml": "^3.0.0",
+    "int64-buffer": "^1.0.1",
     "ts-ebml": "^2.0.2"
   },
   "scripts": {

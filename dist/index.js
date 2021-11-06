@@ -14,6 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ts_ebml_1 = require("ts-ebml");
 const decoder_1 = __importDefault(require("./decoder"));
+const buffer_1 = require("buffer/");
+Object.defineProperty(globalThis, 'Buffer', {
+    value: buffer_1.Buffer
+});
 /**
  * fix webm file media file without 2GB filesize limit
  *

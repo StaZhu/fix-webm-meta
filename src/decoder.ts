@@ -44,7 +44,7 @@ export default class EBMLDecoder {
       if (end <= offsetStart) {
         break;
       }
-      
+
       const _start = Math.max(begin - offsetStart, 0);
       const _stop = Math.min(chunkSize, end - offsetStart);
       if (_start === 0 && _stop === chunkSize) {
@@ -52,7 +52,7 @@ export default class EBMLDecoder {
       } else {
         slicedChunks.push(this._bufferChunks[i].slice(_start, _stop));
       }
-      
+
       offsetStart = offsetStart + chunkSize;
     }
     return slicedChunks;
