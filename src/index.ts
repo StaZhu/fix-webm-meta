@@ -8,9 +8,12 @@ import { Buffer } from 'buffer/'
  * in package ts-ebml: 2.0.2, `ts-ebml/lib/tools.js` line 26 "writeVint(tagData.length)"
  * ebml: 2.2.4 `ebml/lib/ebml/tools.js` line 44 "var buffer = new Buffer(length);"
  */
-Object.defineProperty(globalThis, 'Buffer', {
-  value: Buffer
-})
+// @ts-ignore
+if (!globalThis.Buffer) {
+  Object.defineProperty(globalThis, 'Buffer', {
+    value: Buffer
+  })
+}
 
 /**
  * fix webm file media file without 2GB filesize limit
