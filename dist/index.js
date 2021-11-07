@@ -16,14 +16,17 @@ const ts_ebml_1 = require("ts-ebml");
 const decoder_1 = __importDefault(require("./decoder"));
 const buffer_1 = require("buffer/");
 /**
- * fixed Buffer is not defined in ebml/lib/ebml/tools.js line 44 "var buffer = new Buffer(length);"
+ * fixed "Buffer is not defined" in `ebml/lib/ebml/tools.js` line 44 "var buffer = new Buffer(length);"
  *
- * in package ts-ebml: 2.0.2, ts-ebml/lib/tools.js line 26 "writeVint(tagData.length)"
- * ebml: 2.2.4 ebml/lib/ebml/tools.js line 44 "var buffer = new Buffer(length);"
+ * in package ts-ebml: 2.0.2, `ts-ebml/lib/tools.js` line 26 "writeVint(tagData.length)"
+ * ebml: 2.2.4 `ebml/lib/ebml/tools.js` line 44 "var buffer = new Buffer(length);"
  */
-Object.defineProperty(globalThis, 'Buffer', {
-    value: buffer_1.Buffer
-});
+// @ts-ignore
+if (!globalThis.Buffer) {
+    Object.defineProperty(globalThis, 'Buffer', {
+        value: buffer_1.Buffer
+    });
+}
 /**
  * fix webm file media file without 2GB filesize limit
  *
