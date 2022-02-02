@@ -8,7 +8,8 @@ Use this function can not only add "Duration" but also add "SeekHead", "Seek", "
 ```typescript
 import fixWebmMetaInfo from 'fix-webm-metainfo';
 
-const mimeType = 'video/webm\;codecs=vp9';
+// please use h264 to have hardware encode accelerate
+const mimeType = 'video/webm\;codecs=h264';
 const blobSlice: BlobPart[] = [];
 
 mediaRecorder = new MediaRecorder(stream, {
