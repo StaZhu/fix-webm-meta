@@ -2,13 +2,13 @@
 
 This is a lib based on ts-ebml and support large file (>2GB) which ts-ebml not supported
 
-Use this function can not only add "Duration" but also add "SeekHead", "Seek", "SeekID", "SeekPosition" and "Cues", "CueTime", "CueTrack", "CueClusterPosition", "CueTrackPositions", "CuePoint" for a webm file
+Using this function can not only add "Duration" but also add "SeekHead", "Seek", "SeekID", "SeekPosition" and "Cues", "CueTime", "CueTrack", "CueClusterPosition", "CueTrackPositions", "CuePoint" for a webm file
 ## Usage
 
 ```typescript
 import fixWebmMetaInfo from 'fix-webm-metainfo';
 
-// please use h264 to have hardware encode accelerate
+// please use h264 to enable hardware encode accelerate and decrease cpu usage
 const mimeType = 'video/webm\;codecs=h264';
 const blobSlice: BlobPart[] = [];
 
@@ -22,12 +22,12 @@ mediaRecorder.ondataavailable = (event: BlobEvent) => {
 }
 
 mediaRecorder.onstop = async () => {
-  // support fix webm file larger than 2GB
+  // support fix webm files larger than 2GB
   const fixedWebMBlob = await fixWebmMetaInfo(new Blob([...blobSlice], { type: mimeType }));
   blobSlice = [];
 };
 
-// use timeslice to avoid memory consumption in renderer process, and generate blob size each second
+// using timeslice to avoid memory consumption in renderer process, and generate blob size each second
 mediaRecorder.start(1000);
 setTimeout(() => mediaRecorder.stop(), 5000); // generate 5 blob slices
 
@@ -49,9 +49,9 @@ feat: initial commit
 
 Currently each record will have a maxiumm 5MB memory leak (already the best result, because chromium interal blob <-> arrayBuffer process has some kind of bug, and we have to regenerate webm meta head), if you have the ability to modify chromium, this value can decrease down to  1MB or even much smaller size.
 
-##### How to decrease memory leak(decrease page zie)?
+##### How to decrease memory leak(decrease page size)?
 
-The only why is modify chromium project, here is the example:
+The only why is to modify chromium project, here is the example:
 
 ```c++
 // storage/browser/blob/blob_storage_constants.cc
@@ -68,7 +68,7 @@ const float kDefaultMaxBlobInMemorySpaceUnderPressureRatio = 0.002f;
 
 ##### What is the maximum record file size?
 
-According to chromium blob implention, this value varies from Math.min(software located disk partition size * / 10, free disk space), so if you C:\ partition is 128GB, the max record size is 12.8GB, even if you have 100GB free space.
+According to the chromium blob implention, this value equals to Math.min(software located disk partition size * / 10, free disk space), so if your C:\ partition is 128GB, the max record size is 12.8GB, even if you have 100GB free space.
 
 ##### how to get rid of the limit of record file size?
 
@@ -90,7 +90,7 @@ if (disk_size >= 0) {
 
 ##### Why timeslice will reduce memory usage?
 
-Because blob creation has a Renderer -> Main -> Memory/Disk Transport process, and if no mediaRecord.RequestData() called or timeslice specified, then all data will be buffered in renderer process, we have to clear the data in memory.
+Because Blob creation has a Renderer -> Main -> Memory/Disk Transport process, and if no mediaRecord.RequestData() called or timeslice specified, then all data will be buffered in the renderer process, we have to clear the data in memory.
 
 ##### What Video record tooks me 2GB（x64) in main process?
 
@@ -98,7 +98,7 @@ Because Blob designed to be store in sharedMemory initially, and if the memory i
 
 ##### how can i not use memory and directly store blob to disk?
 
-The only why is modify chromium project, here is the example:
+The only way is to modify chromium project, here is the example:
 
 ```c++
 // storage/browser/blob/blob_memory_controller.cc
