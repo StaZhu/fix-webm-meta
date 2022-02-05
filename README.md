@@ -51,7 +51,7 @@ Currently each record will have a maxiumm 5MB memory leak (already the best resu
 
 ##### How to decrease memory leak(decrease page size)?
 
-The only why is to modify chromium project, here is the example:
+The only way is to modify chromium project, here is the example:
 
 ```c++
 // storage/browser/blob/blob_storage_constants.cc
