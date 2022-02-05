@@ -119,7 +119,3 @@ if (memory_size > 0) {
 1. using web worker to decrease thread crimp (already implement, will suport later)
 2. decrease runtime fix memory consumption
 3. support non-node enviroment fixup
-
-## License
-
-GPL General Public License 3.0 see http://www.gnu.org/licenses/gpl-3.0.html
