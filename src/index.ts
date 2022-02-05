@@ -2,7 +2,7 @@ import { tools, Reader } from 'ts-ebml';
 import LargeFileDecorder from './decoder';
 
 /**
- * fix webm file media file without 2GB filesize limit
+ * fix webm media file without 2GB filesize limit
  * 
  * @param the blob you need to fix
  * @returns the blob that has been fixed
