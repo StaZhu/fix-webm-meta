@@ -1,6 +1,6 @@
 # fix-webm-metainfo
 
-This is a lib based on ts-ebml and support large file (>2GB) which ts-ebml not supported
+This is a lib based on ts-ebml and support large file (>2GB) that ts-ebml not supported
 
 Using this function can not only add "Duration" but also add "SeekHead", "Seek", "SeekID", "SeekPosition" and "Cues", "CueTime", "CueTrack", "CueClusterPosition", "CueTrackPositions", "CuePoint" for a webm file
 ## Usage
