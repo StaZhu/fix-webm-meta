@@ -8,8 +8,7 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE",
-    "tsconfig.json"
+    "LICENSE"
   ],
   "keywords": [
     "webm",
