@@ -1,6 +1,6 @@
 {
   "name": "fix-webm-metainfo",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "a lib based on ts-ebml and support large file (>2GB)",
   "author": "StaZhu",
   "license": "MIT",
