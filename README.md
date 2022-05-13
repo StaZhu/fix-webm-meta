@@ -27,7 +27,7 @@ mediaRecorder.onstop = async () => {
   blobSlice = [];
 };
 
-// using timeslice to avoid memory consumption in renderer process, and generate blob size each second
+// using timeslice to avoid memory consumption in renderer process, and generate a blob object each second
 mediaRecorder.start(1000);
 setTimeout(() => mediaRecorder.stop(), 5000); // generate 5 blob slices
 
@@ -36,8 +36,11 @@ setTimeout(() => mediaRecorder.stop(), 5000); // generate 5 blob slices
 ## Release Note
 
 ```
+v1.0.8:
+fix: update webm matroska-schema to V4 version
+
 v1.0.6:
-fix: using Blob instead of arrayBuffer to fix recreate webm and solving memory leak
+fix: using Blob instead of ArrayBuffer to fix recreate webm issue and solving memory leak
 
 v1.0.5
 feat: initial commit
@@ -45,11 +48,11 @@ feat: initial commit
 
 ## Tips for using this library
 
-##### Does this library has memory leak (both in main process and renderer process) ?
+##### Does this library has memory leak (both in main (browser) process and renderer process) ?
 
-Currently each record will have a maxiumm 5MB memory leak (already the best result, because chromium interal blob <-> arrayBuffer process has some kind of bug, and we have to regenerate webm meta head), if you have the ability to modify chromium, this value can decrease down to  1MB or even much smaller size.
+Currently each record will have a maxiumm 5MB memory leak (already the best result, because chromium internal blob <-> arrayBuffer process has some kind of bug, and webm meta head will leak for each video record, seen in: chrome://blob-internals), if you have the ability to modify chromium, this value can decrease down to 1MB or even much smaller size.
 
-##### How to decrease memory leak(decrease page size)?
+##### How to decrease memory leak (decrease page size)?
 
 The only way is to modify chromium project, here is the example:
 
@@ -72,7 +75,7 @@ According to the chromium blob implention, this value equals to Math.min(softwar
 
 ##### how to get rid of the limit of record file size?
 
-The only why is modify chromium project, here is the example:
+The only way is modify chromium project, here is the example:
 
 ```c++
 // storage/browser/blob/blob_memory_controller.cc
